@@ -16,7 +16,7 @@ Navigate to the downloaded folder and run bundler.
 
 `bundle exec ruby ./server.rb`
 
-Or start both beanstalkd and the server using [Foreman](http://railscasts.com/episodes/281-foreman).
+Or start both beanstalkd and the server using [foreman](http://railscasts.com/episodes/281-foreman).
 
 `foreman start`
 
