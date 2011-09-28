@@ -4,7 +4,10 @@ require "colorize"
 require "jsonify"
 require "em-jack"
 
-def debug(string)
+#
+# @message String Message to be printed to console
+#
+def debug(message)
   puts "%s %s" % ["==>".black, string.to_s.green]
 end
 
