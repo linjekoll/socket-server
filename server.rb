@@ -5,14 +5,16 @@ require "jsonify"
 require "em-jack"
 
 def debug(string)
-  puts "%s %s" % ["==>".black, string.green]
+  puts "%s %s" % ["==>".black, string.to_s.green]
 end
+
+port = ARGV[0] || 3333
 
 EM.run do
   jack = EMJack::Connection.new
   channel = EM::Channel.new
   
-  EventMachine::WebSocket.start(host: "0.0.0.0", port: 3333) do |ws|
+  EventMachine::WebSocket.start(host: "0.0.0.0", port: port) do |ws|
     ws.onopen do
       debug "WebSocket connection open."
       sid = nil
@@ -59,4 +61,6 @@ EM.run do
       end
     end
   end
+  
+  debug "Server started on port #{port}."
 end
