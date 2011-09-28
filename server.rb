@@ -8,7 +8,7 @@ require "em-jack"
 # @message String Message to be printed to console
 #
 def debug(message)
-  puts "%s %s" % ["==>".black, string.to_s.green]
+  puts "%s %s" % ["==>".black, message.to_s.green]
 end
 
 port = ARGV[0] || 3333
