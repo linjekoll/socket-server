@@ -1,0 +1,15 @@
+<html>
+  <script type="text/javascript" charset="utf-8">
+    var socket = new WebSocket("ws://localhost:3333");
+    socket.onopen = function() {
+      console.debug("IN!");
+      socket.send("THIS IS A MESSAGE!");
+      
+      socket.onmessage = function(event) {
+        console.debug("DATA: " + event.data);
+      };
+    };
+  </script>
+  <body>
+  </body>
+</html>
