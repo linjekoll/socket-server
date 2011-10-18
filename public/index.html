@@ -1,25 +1,28 @@
 <html>
   <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="json2.js"></script>
   <script type="text/javascript" charset="utf-8">
     var socket = new WebSocket("ws://localhost:3333");
     $(function() {
       $("form").submit(function() {
         var $self = $(this);
         
-        var result = {};
+        var result = [];
         $self.find("input[type='text']").each(function(index, item) {
           $item = $(item);
           if($item.val().length === 0) { return; }
           
           var cached = result[$item.data("item")];
-          result[$item.data("item")] = cached || {};
-          result[$item.data("item")][$item.attr("name")] = $item.val();          
+          var id     = parseInt($item.data("item"), 10);
+          
+          result[id] = cached || {};
+          result[id][$item.attr("name")] = $item.val();          
         });
         
         /* Do we have anything to push ? */        
         if(result){
           try {
-            socket.send(result);
+            socket.send(JSON.stringify(result));
           } catch(e){
             console.debug("Server is down", e);
           }
@@ -34,6 +37,7 @@
     });
     
     socket.onopen = function() {
+      console.debug("Connection is now open.");
       socket.onmessage = function(event) {
         $("#server-message").html(event.data);
       };
@@ -43,16 +47,16 @@
     <form>
       <div id="first-input">
         <label for="line_1">Line</label>
-        <input id="line_1" data-item="1" name="line" type="text" placeholder="Line"/>
+        <input id="line_1" data-item="0" name="line_id" type="text" placeholder="Line"/ value="1">
         <label for="provider_1">Provider</label>
-        <input id="provider_1" data-item="1" name="provider" type="text" placeholder="Provider"/>
+        <input id="provider_1" data-item="0" name="provider_id" type="text" placeholder="Provider"/ value="1">
       </div>
       
       <div id="sec-input">
         <label for="line_2">Line</label>
-        <input id="line_2" data-item="2" name="line" type="text" placeholder="Line"/>
+        <input id="line_2" data-item="1" name="line_id" type="text" placeholder="Line"/>
         <label for="provider_2">Provider</label>
-        <input id="provider_2" data-item="2" name="provider" type="text" placeholder="Provider"/>
+        <input id="provider_2" data-item="1" name="provider_id" type="text" placeholder="Provider"/>
       </div>      
       <input name="Send" value="Send" type="submit"/>
     </form>
