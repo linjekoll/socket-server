@@ -73,6 +73,7 @@ EM.run do
   end
   
   jack.use("linjekoll.socket-server").callback do
+    debug("I'm using the linjekoll.socket-server tube")
     jack.each_job do |job|
       debug "Ingoing job with id #{job.jobid} and size #{job.body.size}."
       
