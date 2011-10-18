@@ -1,2 +1,2 @@
 beanstalkd: beanstalkd
-server: bundle exec ruby ./server.rb
+server: bundle exec ruby ./socket.rb

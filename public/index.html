@@ -1,0 +1,65 @@
+<html>
+  <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    var socket = new WebSocket("ws://localhost:3333");
+    $(function() {
+      $("form").submit(function() {
+        var $self = $(this);
+        
+        var result = {};
+        $self.find("input[type='text']").each(function(index, item) {
+          $item = $(item);
+          if($item.val().length === 0) { return; }
+          
+          var cached = result[$item.data("item")];
+          result[$item.data("item")] = cached || {};
+          result[$item.data("item")][$item.attr("name")] = $item.val();          
+        });
+        
+        /* Do we have anything to push ? */        
+        if(result){
+          try {
+            socket.send(result);
+          } catch(e){
+            console.debug("Server is down", e);
+          }
+          
+          console.debug("Sending data to clients.", result);
+        } else {
+          console.debug("Nothing to push");
+        }
+        
+        return false;
+      });
+    });
+    
+    socket.onopen = function() {
+      socket.onmessage = function(event) {
+        $("#server-message").html(event.data);
+      };
+    };    
+  </script>
+  <body>
+    <form>
+      <div>
+        <input data-item="1" name="line" type="text" placeholder="Line"/>
+        <input data-item="1" name="provider" type="text" placeholder="Provider"/>
+      </div>
+      
+      <div>
+        <input data-item="2" name="line" type="text" placeholder="Line"/>
+        <input data-item="2" name="provider" type="text" placeholder="Provider"/>
+      </div>
+      
+      <div>
+        <input data-item="3" name="line" type="text" placeholder="Line"/>
+        <input data-item="3" name="provider" type="text" placeholder="Provider"/>
+      </div>
+      <input type="submit"/>
+    </form>
+    
+    <div id="server-message">
+      Waiting on message from server.
+    </div>
+  </body>
+</html>
