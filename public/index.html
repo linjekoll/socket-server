@@ -37,14 +37,9 @@
     });
     
     socket.onopen = function() {
-      console.debug("Connection is now open.");      
-      $(socket).bind("onmessage", function(event) {
-        $("#server-message").append("<br>2=>" + event.data);
-      });
-      
-      $(socket).bind("onmessage", function(event) {
-        $("#server-message").append("<br>2=>" + event.data);
-      });
+      socket.onmessage = function(event) {
+        $("#server-message").append("<br/>" + event.data);
+      };
     };    
   </script>
   <body>
@@ -66,7 +61,6 @@
     </form>
     
     <div id="server-message">
-      Waiting on message from server.
     </div>
   </body>
 </html>
