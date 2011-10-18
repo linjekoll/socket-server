@@ -22,7 +22,7 @@ end
 port = ARGV[0] || 3333
 
 EM.run do
-  jack = EMJack::Connection.new
+  jack = EMJack::Connection.new(tube: "linjekoll.socket-server")
   channel = EM::Channel.new
   
   EventMachine::WebSocket.start(host: "0.0.0.0", port: port) do |ws|
@@ -72,20 +72,17 @@ EM.run do
     end
   end
   
-#  jack.use("linjekoll.socket-server").callback do
-  #  debug("I'm using the linjekoll.socket-server tube")
-    jack.each_job do |job|
-      debug "Ingoing job with id #{job.jobid} and size #{job.body.size}."
-      
-      begin
-        channel.push(JSON.parse(job.body))
-      rescue JSON::ParserError
-        debug $!.message
-      ensure
-        jack.delete(job)
-      end
+  jack.each_job do |job|
+    debug "Ingoing job with id #{job.jobid} and size #{job.body.size}."
+    
+    begin
+      channel.push(JSON.parse(job.body))
+    rescue JSON::ParserError
+      debug $!.message
+    ensure
+      jack.delete(job)
     end
- # end
+  end
   
   debug "Server started on port #{port}."
 end
