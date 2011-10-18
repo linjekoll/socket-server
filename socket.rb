@@ -72,8 +72,8 @@ EM.run do
     end
   end
   
-  jack.use("linjekoll.socket-server").callback do
-    debug("I'm using the linjekoll.socket-server tube")
+#  jack.use("linjekoll.socket-server").callback do
+  #  debug("I'm using the linjekoll.socket-server tube")
     jack.each_job do |job|
       debug "Ingoing job with id #{job.jobid} and size #{job.body.size}."
       
@@ -85,7 +85,7 @@ EM.run do
         jack.delete(job)
       end
     end
-  end
+ # end
   
   debug "Server started on port #{port}."
 end

@@ -2,6 +2,7 @@
   <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
   <script type="text/javascript" charset="utf-8" src="json2.js"></script>
   <script type="text/javascript" charset="utf-8">
+    //var socket = new WebSocket("ws://46.16.232.244:3333");
     var socket = new WebSocket("ws://localhost:3333");
     $(function() {
       $("form").submit(function() {
@@ -37,10 +38,14 @@
     });
     
     socket.onopen = function() {
-      console.debug("Connection is now open.");
-      socket.onmessage = function(event) {
-        $("#server-message").append("<br>" + event.data);
-      };
+      console.debug("Connection is now open.");      
+      $(socket).bind("onmessage", function(event) {
+        $("#server-message").append("<br>2=>" + event.data);
+      });
+      
+      $(socket).bind("onmessage", function(event) {
+        $("#server-message").append("<br>2=>" + event.data);
+      });
     };    
   </script>
   <body>
