@@ -39,7 +39,7 @@
     socket.onopen = function() {
       console.debug("Connection is now open.");
       socket.onmessage = function(event) {
-        $("#server-message").html(event.data);
+        $("#server-message").append("<br>" + event.data);
       };
     };    
   </script>

@@ -2,7 +2,16 @@ require "eventmachine"
 require "em-websocket"
 require "colorize"
 require "jsonify"
+require "uuid"
 require "em-jack"
+
+class String
+  def from_json
+    JSON.parse(self)
+  rescue JSON::ParseError
+    return nil
+  end
+end
 
 #
 # @message String Message to be printed to console
@@ -21,23 +30,33 @@ EM.run do
     ws.onopen do
       debug "WebSocket connection open."
       sid = nil
-      
-      ws.onmessage do |msg|
+      list = []
+      ws.onmessage do |notification|
         # User subscribes to the 'new data' channel
         # When new data is beign fetch and processed, 
         # this is the channel that'll be notified
         # @data Hash Data push from a provider
         # msg = {provider_id: n, line_id: n}
-        msg = JSON.parse(msg)
-        debug(msg)
+        notification = notification.from_json || []
+        
+        # Let's print the given data
+        debug("Data push from client: #{notification.inspect}")
+        
+        listen = notification.uniq - list
+                
+        # Nothing to listen for?
+        next if listen.empty?
+        
+        list.push(*listen)
+                
         sid = channel.subscribe do |data|
-          msg.each do |message|
+          listen.each do |message|
             # Do we have any data to push to user?            
             if ["provider_id", "line_id"].all?{|w| message[w].to_s == data[w].to_s}
               ws.send(data.to_json.force_encoding("BINARY"))
               debug("Pushing :" + data.to_json)
             else
-              debug "'%s' did not match '%s', or '%s' did not match '%s'." % [
+              debug "'%s' did not match '%s', or '%s' did not match '%s', I'm not sure." % [
                 message["provider_id"],
                 data["provider_id"],
                 message["line_id"],
