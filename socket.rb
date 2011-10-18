@@ -2,7 +2,6 @@ require "eventmachine"
 require "em-websocket"
 require "colorize"
 require "jsonify"
-require "uuid"
 require "em-jack"
 
 class String
