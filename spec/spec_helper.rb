@@ -1,6 +1,7 @@
 require "rspec"
 require "capybara"
 require "capybara/dsl"
+require "beanstalk-client"
 require "capybara/rspec"
 require_relative "./../server"
 
@@ -30,9 +31,8 @@ end
 # https://github.com/linjekoll/api-server-js/blob/master/README.md
 #
 
-beanstalk = Beanstalk::Pool.new(['localhost:11300'])
-beanstalk.use("linjekoll.socket-server")
-
 def push(data)
+  beanstalk = Beanstalk::Pool.new(['localhost:11300'])
+  beanstalk.use("linjekoll.socket-server")
   beanstalk.put(data)
 end

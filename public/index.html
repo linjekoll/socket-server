@@ -41,21 +41,20 @@
   </script>
   <body>
     <form>
-      <div>
-        <input data-item="1" name="line" type="text" placeholder="Line"/>
-        <input data-item="1" name="provider" type="text" placeholder="Provider"/>
+      <div id="first-input">
+        <label for="line_1">Line</label>
+        <input id="line_1" data-item="1" name="line" type="text" placeholder="Line"/>
+        <label for="provider_1">Provider</label>
+        <input id="provider_1" data-item="1" name="provider" type="text" placeholder="Provider"/>
       </div>
       
-      <div>
-        <input data-item="2" name="line" type="text" placeholder="Line"/>
-        <input data-item="2" name="provider" type="text" placeholder="Provider"/>
-      </div>
-      
-      <div>
-        <input data-item="3" name="line" type="text" placeholder="Line"/>
-        <input data-item="3" name="provider" type="text" placeholder="Provider"/>
-      </div>
-      <input type="submit"/>
+      <div id="sec-input">
+        <label for="line_2">Line</label>
+        <input id="line_2" data-item="2" name="line" type="text" placeholder="Line"/>
+        <label for="provider_2">Provider</label>
+        <input id="provider_2" data-item="2" name="provider" type="text" placeholder="Provider"/>
+      </div>      
+      <input name="Send" value="Send" type="submit"/>
     </form>
     
     <div id="server-message">
