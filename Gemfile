@@ -9,7 +9,6 @@ gem "jsonify"
 gem "faye"
 gem "sinatra"
 gem "beanstalk-client"
-gem "uuid"
 
 group :development do
   gem "foreman"
