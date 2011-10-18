@@ -7,6 +7,7 @@ gem "em-websocket"
 gem "colorize"
 gem "jsonify"
 gem "faye"
+gem "sinatra"
 
 group :development do
   gem "foreman"
@@ -17,4 +18,5 @@ end
 group :text do
   gem "rspec"
   gem "ZenTest"
+  gem "capybara"
 end
