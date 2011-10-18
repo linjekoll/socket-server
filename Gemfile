@@ -7,6 +7,7 @@ gem "em-websocket"
 gem "colorize"
 gem "jsonify"
 gem "faye"
+gem "em-http-request"
 gem "sinatra"
 gem "beanstalk-client"
 

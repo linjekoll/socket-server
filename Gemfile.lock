@@ -95,6 +95,7 @@ DEPENDENCIES
   beanstalk-client
   capybara
   colorize
+  em-http-request
   em-jack
   em-websocket
   eventmachine
