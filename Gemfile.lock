@@ -71,9 +71,6 @@ GEM
     sinatra (1.2.6)
       rack (~> 1.1)
       tilt (>= 1.2.2, < 2.0)
-    stalker (0.9.0)
-      beanstalk-client
-      json_pure
     term-ansicolor (1.0.6)
     thin (1.2.11)
       daemons (>= 1.0.9)
@@ -95,6 +92,7 @@ PLATFORMS
 
 DEPENDENCIES
   ZenTest
+  beanstalk-client
   capybara
   colorize
   em-jack
@@ -105,6 +103,5 @@ DEPENDENCIES
   jsonify
   rspec
   sinatra
-  stalker
   vlad (= 2.2.1)
   vlad-git

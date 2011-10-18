@@ -8,7 +8,7 @@ gem "colorize"
 gem "jsonify"
 gem "faye"
 gem "sinatra"
-gem "stalker"
+gem "beanstalk-client"
 
 group :development do
   gem "foreman"
