@@ -3,6 +3,7 @@ require "em-websocket"
 require "colorize"
 require "jsonify"
 require "em-jack"
+require "./lib/cache.rb"
 
 class String
   def from_json
@@ -22,9 +23,10 @@ end
 port = ARGV[0] || 3333
 
 EM.run do
-  jack = EMJack::Connection.new(tube: "linjekoll.socket-server")
+  jack    = EMJack::Connection.new(tube: "linjekoll.socket-server")
   channel = EM::Channel.new
-  
+  cache   = Cache.new
+    
   EventMachine::WebSocket.start(host: "0.0.0.0", port: port) do |ws|
     # @event String Event that should be triggered on the client side.
     # @data Object Data that should be pushed to the given client
@@ -86,7 +88,7 @@ EM.run do
           listen.each do |message|
             # Do we have any data to push to user?            
             if ["provider_id", "line_id"].all?{|w| message[w].to_s == data[w].to_s}              
-              ws.trigger("update.trip", data)              
+              ws.trigger("update.trip", data)
               debug("Pushing :" + data.inspect)
             else
               debug "'%s' did not match '%s', or '%s' did not match '%s', I'm not sure." % [
@@ -110,12 +112,20 @@ EM.run do
     debug "Ingoing job with id #{job.jobid} and size #{job.body.size}."
     
     begin
-      channel.push(JSON.parse(job.body))
+      parsed = JSON.parse(job.body)
     rescue JSON::ParserError
       debug $!.message
     ensure
       jack.delete(job)
     end
+    
+    next if parsed.nil?
+    
+    # Everything should be saved to cache
+    cache.save!(parsed)
+    
+    # Push data to client
+    channel.push(parsed)
   end
   
   debug "Server started on port #{port}."
