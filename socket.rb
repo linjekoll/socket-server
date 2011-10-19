@@ -35,7 +35,7 @@ EM.run do
         
         # If this isn't the correct event, abort!
         unless ingoing[:event] == "subscribe.trip.update"
-          debug("Invalid event: #{ingoing[:event].inspect}"); next
+          debug("Invalid event: #{ingoing.inspect}"); next
         end
         
         # Client could send invalid data, if so; abort!
