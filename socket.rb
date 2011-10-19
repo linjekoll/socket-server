@@ -31,7 +31,12 @@ EM.run do
       sid = nil
       list = []
       ws.onmessage do |ingoing|
-        ingoing = ingoing.from_json || {}
+        ingoing = ingoing.from_json
+        
+        # This must be a hash, otherwise we abort.
+        unless ingoing.is_a?(Hash)
+          debug("Invalid message from client: #{ingoing}")
+        end
         
         # If this isn't the correct event, abort!
         unless ingoing["event"] == "subscribe.trip.update"
