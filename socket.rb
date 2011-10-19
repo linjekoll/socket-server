@@ -44,7 +44,7 @@ EM.run do
         ingoing = ingoing.from_json
         
         # This must be an array, otherwise we abort.
-        unless ingoing.is_a?(Array)
+        unless ingoing.is_a?(Hash)
           ws.trigger("error", {
             message: "Invalid data, should be an array.",
             ingoing: ingoing
@@ -63,9 +63,9 @@ EM.run do
         end
         
         # Client could send invalid data, if so; abort!
-        unless notification = ingoing["data"]
+        if not notification = ingoing["data"] or not notification.is_a?(Array)
           ws.trigger("error", {
-            message: "Received that was empty.",
+            message: "Received data was invalid.",
             ingoing: ingoing
           })
           
