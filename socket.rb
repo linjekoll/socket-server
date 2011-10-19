@@ -33,8 +33,8 @@ EM.run do
       ws.onmessage do |ingoing|
         ingoing = ingoing.from_json
         
-        # This must be a hash, otherwise we abort.
-        unless ingoing.is_a?(Hash)
+        # This must be an array, otherwise we abort.
+        unless ingoing.is_a?(Array)
           debug("Invalid message from client: #{ingoing}")
         end
         
