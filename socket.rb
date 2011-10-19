@@ -69,7 +69,7 @@ EM.run do
             ingoing: ingoing
           })
           
-          debug("Empty data: #{ingoing.inspect}"); next
+          debug("Invalid: #{ingoing.inspect}"); next
         end
         
         # Let's print the given data
