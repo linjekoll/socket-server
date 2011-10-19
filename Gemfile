@@ -8,6 +8,7 @@ gem "colorize"
 gem "jsonify"
 gem "faye"
 gem "sinatra"
+gem "redis"
 gem "beanstalk-client"
 
 group :development do
