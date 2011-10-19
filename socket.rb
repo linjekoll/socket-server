@@ -124,9 +124,7 @@ EM.run do
     next if parsed.nil?
     
     # Everything should be saved to cache
-    # N.B. We're using the JSON version of @parsed,
-    # not @parsed it self.
-    redis_cache.save!(job.body)
+    redis_cache.save!(parsed)
     
     # Push data to client
     channel.push(parsed)

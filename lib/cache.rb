@@ -12,7 +12,7 @@ class Cache
   # "line_id" Integer A line id.
   # All keys should be strings, not symbols
   def save!(data)
-    @redis.set("line.provider.#{data["provider"]}.#{data["line"]}", data)
+    @redis.set("line.provider.#{data["provider"]}.#{data["line"]}", data.to_json)
   end
   
   # Reads data from cache
@@ -34,6 +34,9 @@ class Cache
   # It might return an nil if cache is empty
   # All keys should be strings, not symbols
   def read(data)
-    @redis.get("line.provider.#{data["provider"]}.#{data["line"]}")
+    data = @redis.get("line.provider.#{data["provider"]}.#{data["line"]}")
+    if data
+      return data.from_json
+    end
   end
 end
