@@ -34,7 +34,7 @@ class Cache
   # It might return an nil if cache is empty
   # All keys should be strings, not symbols
   def read(data)
-    data = @redis.get("line.provider.#{data["provider"]}.#{data["line"]}")
+    data = @redis.get("line.provider.#{data["provider_id"]}.#{data["line_id"]}")
     if data
       return data.from_json
     end
