@@ -77,12 +77,21 @@ EM.run do
         # Let's print the given data
         debug("Data push from client: #{notification.inspect}")
         
+        # @listen Should now only contain new lines
         listen = notification.uniq - list
                 
         # Nothing to listen for?
         next if listen.empty?
         
         list.push(*listen)
+        
+        # Do we have any cached data to respond with?
+        listen.each do |what|
+          cache = cache.read(what)
+          if cache
+            ws.trigger("update.trip", cache)
+          end
+        end
                 
         sid = channel.subscribe do |data|
           listen.each do |message|
@@ -90,13 +99,6 @@ EM.run do
             if ["provider_id", "line_id"].all?{|w| message[w].to_s == data[w].to_s}              
               ws.trigger("update.trip", data)
               debug("Pushing :" + data.inspect)
-            else
-              debug "'%s' did not match '%s', or '%s' did not match '%s', I'm not sure." % [
-                message["provider_id"],
-                data["provider_id"],
-                message["line_id"],
-                data["line_id"]
-              ]
             end
           end          
         end
