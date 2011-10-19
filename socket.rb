@@ -51,7 +51,7 @@ EM.run do
             message: "Invalid data, should be an array.",
             ingoing: ingoing
           })
-          debug("Invalid message from client: #{ingoing}"); next
+          debug("Invalid 1: #{ingoing}"); next
         end
         
         # If this isn't the correct event, abort!
@@ -61,32 +61,26 @@ EM.run do
             ingoing: ingoing
           })
           
-          debug("Invalid event: #{ingoing.inspect}"); next
+          debug("Invalid 2: #{ingoing.inspect}"); next
         end
         
         # Client could send invalid data, if so; abort!
         if not notification = ingoing["data"] or not notification.is_a?(Array)
           ws.trigger("error", {
             message: "Received data was invalid.",
-            ingoing: ingoing,
-            notification: notification,
-            bool2: notification.is_a?(Array),
-            bool1: !!notification
-            
+            ingoing: ingoing            
           })
           
-          debug("Invalid: #{ingoing.inspect}"); next
+          debug("Invalid 3: #{ingoing.inspect}"); next
         end
         
-        if notification.first.is_a?(Hash)
+        unless notification.first.is_a?(Hash)
           ws.trigger("error", {
             message: "Invalid data",
-            ingoing: ingoing,
-            notification: notification,
-            what_is_first: notification.first.class.to_s
+            ingoing: ingoing
           })
           
-          debug("Invalid: #{ingoing.inspect}"); next
+          debug("Invalid 4: #{ingoing.inspect}"); next
         end
         
         # Let's print the given data
