@@ -26,6 +26,16 @@ EM.run do
   channel = EM::Channel.new
   
   EventMachine::WebSocket.start(host: "0.0.0.0", port: port) do |ws|
+    # @event String Event that should be triggered on the client side.
+    # @data Object Data that should be pushed to the given client
+    # @data could be anything that has implemented #to_json
+    def ws.trigger(event, data)
+      self.send({
+        data: data,
+        event: event
+      }.to_json.force_encoding("BINARY"))
+    end
+    
     ws.onopen do
       debug "WebSocket connection open."
       sid = nil
@@ -35,16 +45,30 @@ EM.run do
         
         # This must be an array, otherwise we abort.
         unless ingoing.is_a?(Array)
+          ws.trigger("error", {
+            message: "Invalid data, should be an array.",
+            ingoing: ingoing
+          })
           debug("Invalid message from client: #{ingoing}"); next
         end
         
         # If this isn't the correct event, abort!
         unless ingoing["event"] == "subscribe.trip.update"
+          ws.trigger("error", {
+            message: "Invalid event.",
+            ingoing: ingoing
+          })
+          
           debug("Invalid event: #{ingoing.inspect}"); next
         end
         
         # Client could send invalid data, if so; abort!
         unless notification = ingoing["data"]
+          ws.trigger("error", {
+            message: "Received that was empty.",
+            ingoing: ingoing
+          })
+          
           debug("Empty data: #{ingoing.inspect}"); next
         end
         
@@ -61,15 +85,9 @@ EM.run do
         sid = channel.subscribe do |data|
           listen.each do |message|
             # Do we have any data to push to user?            
-            if ["provider_id", "line_id"].all?{|w| message[w].to_s == data[w].to_s}
-              raw = {
-                data: data,
-                event: "update.trip"
-              }.to_json.force_encoding("BINARY")
-              
-              ws.send(raw)
-              
-              debug("Pushing :" + raw)
+            if ["provider_id", "line_id"].all?{|w| message[w].to_s == data[w].to_s}              
+              ws.trigger("update.trip", data)              
+              debug("Pushing :" + data.inspect)
             else
               debug "'%s' did not match '%s', or '%s' did not match '%s', I'm not sure." % [
                 message["provider_id"],
