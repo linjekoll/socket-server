@@ -4,7 +4,7 @@ God.watch do |w|
   w.name     = "socket"
   w.group    = "linjekoll"
   w.interval = 30.seconds
-  w.start    = "bundle exec ruby #{root}/server.rb"
+  w.start    = "bundle exec ruby #{root}/socket.rb"
   
   w.env = {
     "BUNDLE_GEMFILE" => "#{root}/Gemfile"

@@ -76,7 +76,7 @@ EM.run do
         
         if notification.first.is_a?(Hash)
           ws.trigger("error", {
-            message: "Invalid data"
+            message: "Invalid data",
             ingoing: ingoing
           })
           
