@@ -25,7 +25,7 @@ port = ARGV[0] || 3333
 EM.run do
   jack    = EMJack::Connection.new(tube: "linjekoll.socket-server")
   channel = EM::Channel.new
-  cache   = Cache.new
+  redis_cache   = Cache.new
     
   EventMachine::WebSocket.start(host: "0.0.0.0", port: port) do |ws|
     # @event String Event that should be triggered on the client side.
@@ -87,7 +87,7 @@ EM.run do
         
         # Do we have any cached data to respond with?
         listen.each do |what|
-          cache = cache.read(what)
+          cache = redis_cache.read(what)
           if cache
             ws.trigger("update.trip", cache)
           end
@@ -126,7 +126,7 @@ EM.run do
     # Everything should be saved to cache
     # N.B. We're using the JSON version of @parsed,
     # not @parsed it self.
-    cache.save!(job.body)
+    redis_cache.save!(job.body)
     
     # Push data to client
     channel.push(parsed)
