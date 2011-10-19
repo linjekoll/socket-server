@@ -68,7 +68,8 @@ EM.run do
         if not notification = ingoing["data"] or not notification.is_a?(Array)
           ws.trigger("error", {
             message: "Received data was invalid.",
-            ingoing: ingoing
+            ingoing: ingoing,
+            notification: notification
           })
           
           debug("Invalid: #{ingoing.inspect}"); next
