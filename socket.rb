@@ -30,13 +30,18 @@ EM.run do
       debug "WebSocket connection open."
       sid = nil
       list = []
-      ws.onmessage do |notification|
-        # User subscribes to the 'new data' channel
-        # When new data is beign fetch and processed, 
-        # this is the channel that'll be notified
-        # @data Hash Data push from a provider
-        # msg = {provider_id: n, line_id: n}
-        notification = notification.from_json || []
+      ws.onmessage do |ingoing|
+        ingoing = ingoing.from_json || {}
+        
+        # If this isn't the correct event, abort!
+        unless ingoing[:event] == "subscribe.trip.update"
+          debug("Invalid event: #{ingoing[:event].inspect}"); next
+        end
+        
+        # Client could send invalid data, if so; abort!
+        unless notification = ingoing[:data]
+          debug("Empty data: #{ingoing.inspect}"); next
+        end
         
         # Let's print the given data
         debug("Data push from client: #{notification.inspect}")
