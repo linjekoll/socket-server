@@ -69,7 +69,10 @@ EM.run do
           ws.trigger("error", {
             message: "Received data was invalid.",
             ingoing: ingoing,
-            notification: notification
+            notification: notification,
+            bool2: notification.is_a?(Array),
+            bool1: !!notification
+            
           })
           
           debug("Invalid: #{ingoing.inspect}"); next
