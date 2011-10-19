@@ -124,7 +124,9 @@ EM.run do
     next if parsed.nil?
     
     # Everything should be saved to cache
-    cache.save!(parsed)
+    # N.B. We're using the JSON version of @parsed,
+    # not @parsed it self.
+    cache.save!(job.body)
     
     # Push data to client
     channel.push(parsed)
