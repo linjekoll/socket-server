@@ -34,12 +34,12 @@ EM.run do
         ingoing = ingoing.from_json || {}
         
         # If this isn't the correct event, abort!
-        unless ingoing[:event] == "subscribe.trip.update"
+        unless ingoing["event"] == "subscribe.trip.update"
           debug("Invalid event: #{ingoing.inspect}"); next
         end
         
         # Client could send invalid data, if so; abort!
-        unless notification = ingoing[:data]
+        unless notification = ingoing["data"]
           debug("Empty data: #{ingoing.inspect}"); next
         end
         
