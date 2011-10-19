@@ -52,8 +52,14 @@ EM.run do
           listen.each do |message|
             # Do we have any data to push to user?            
             if ["provider_id", "line_id"].all?{|w| message[w].to_s == data[w].to_s}
-              ws.send(data.to_json.force_encoding("BINARY"))
-              debug("Pushing :" + data.to_json)
+              raw = {
+                data: data,
+                event: "update.trip"
+              }.to_json.force_encoding("BINARY")
+              
+              ws.send(raw)
+              
+              debug("Pushing :" + raw)
             else
               debug "'%s' did not match '%s', or '%s' did not match '%s', I'm not sure." % [
                 message["provider_id"],
