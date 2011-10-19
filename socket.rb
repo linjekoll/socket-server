@@ -74,6 +74,15 @@ EM.run do
           debug("Invalid: #{ingoing.inspect}"); next
         end
         
+        if notification.first.is_a?(Hash)
+          ws.trigger("error", {
+            message: "Invalid data"
+            ingoing: ingoing
+          })
+          
+          debug("Invalid: #{ingoing.inspect}"); next
+        end
+        
         # Let's print the given data
         debug("Data push from client: #{notification.inspect}")
         

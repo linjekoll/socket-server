@@ -1,8 +1,8 @@
 root = File.expand_path("..", __FILE__)
 
 God.watch do |w|
-  w.name     = "dj-1"
-  w.group    = "dj"
+  w.name     = "socket"
+  w.group    = "linjekoll"
   w.interval = 30.seconds
   w.start    = "bundle exec ruby #{root}/server.rb"
   
