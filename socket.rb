@@ -82,7 +82,8 @@ EM.run do
           ws.trigger("error", {
             message: "Invalid data",
             ingoing: ingoing,
-            notification: notification
+            notification: notification,
+            what_is_first: notification.first.class.to_s
           })
           
           debug("Invalid: #{ingoing.inspect}"); next
