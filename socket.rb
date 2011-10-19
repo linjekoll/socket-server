@@ -77,7 +77,8 @@ EM.run do
         if notification.first.is_a?(Hash)
           ws.trigger("error", {
             message: "Invalid data",
-            ingoing: ingoing
+            ingoing: ingoing,
+            notification: notification
           })
           
           debug("Invalid: #{ingoing.inspect}"); next
