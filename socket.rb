@@ -35,7 +35,7 @@ EM.run do
         
         # This must be an array, otherwise we abort.
         unless ingoing.is_a?(Array)
-          debug("Invalid message from client: #{ingoing}")
+          debug("Invalid message from client: #{ingoing}"); next
         end
         
         # If this isn't the correct event, abort!
