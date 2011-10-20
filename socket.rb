@@ -105,10 +105,10 @@ EM.run do
         sid = channel.subscribe do |data|
           listen.each do |message|
             # Do we have any data to push to user?            
-            if ["provider_id", "line_id"].all?{|w| message[w].to_s == data[w].to_s}              
+            #if ["provider_id", "line_id"].all?{|w| message[w].to_s == data[w].to_s}              
               ws.trigger("update.trip", data)
               debug("Pushing :" + data.inspect)
-            end
+            #end
           end          
         end
       end
